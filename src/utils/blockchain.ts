@@ -63,14 +63,3 @@ export async function getTransactionInfo(transactionId: string): Promise<Transac
         data: mappedData
     } as SuccessState<TransactionInfo>;
 }
-
-// import { SatoshisToBtcFunction } from '../../types/utils/blockchain';
-
-// export const satoshisToBtc: SatoshisToBtcFunction = (value) => {
-//     // 1) Convert value to string
-//     // 2) Pad value with a minimum of 8 zeros. This accounts for max BTC precision
-//     // 3) Convert to Number
-//     // 4) Divide by 100000000, to move the decimal point
-//     // 5) Convert to fixed to avoid exponents
-//     return (Number(String(value).padStart(8, "0")) / 100000000).toFixed(8);
-// };
