@@ -1,23 +1,27 @@
-import PocketBase from "pocketbase";
-import { States, SuccessState, ErrorState, NotFoundState } from "/types/utils/state.d.ts";
+import PocketBase, { ClientResponseError } from "pocketbase";
+import { States } from "src/utils/state";
+import { SuccessState, ErrorState, NotFoundState } from "types/utils/state";
 import {
     TransactionSearchRecordResponse,
     TransactionSearchRecord,
     TransactionSearchRecordsResponse
-} from "/types/utils/database/transaction-search";
+} from "types/utils/database/transaction-search";
+import { SortBy } from "@/types/utils/api";
+import { parsePagination } from "../api";
+import { sortByToString } from "./database";
 
 const pb = new PocketBase("http://127.0.0.1:8090");
 const collection = "transaction_search";
 
-export async function getTopSearchedTransactions(limit: number = 5, offset: number = 0): Promise<TransactionSearchRecordsResponse> {
-    const pageFilter = offsetLimitToPageSizePageNumber(limit, offset);
+export async function getTransactionSearches(limit: number = 5, offset: number = 0, sortBy: SortBy[] = [{ field: "updated", order: "desc" }]): Promise<TransactionSearchRecordsResponse> {
+    const pagination = parsePagination(limit ?? 5, offset ?? 0);
+    const sort = sortByToString(sortBy ?? [{ field: "updated", order: "desc" }]);
 
-    let record = null;
     try {
         const records = await pb
             .collection(collection)
-            .getList(pageFilter.pageNumber, pageFilter.pageSize, {
-                sort: '+searched_count',
+            .getList(pagination.page, pagination.size, {
+                sort: sort,
             });
 
         const mappedRecords: TransactionSearchRecord[] = records.items.map((item) => {
@@ -85,7 +89,7 @@ async function incrementTransactionSearchRecord(addressSearchRecord: Transaction
             state: States.Success,
             data: mappedRecord
         } as SuccessState<TransactionSearchRecord>;
-    } catch (error) {
+    } catch (error: any) {
         if (error.status === 404) {
             return {
                 state: States.NotFound
@@ -130,7 +134,6 @@ async function createTransactionSearchRecord(addressId: string): Promise<Transac
 }
 
 async function getTransactionSearchRecord(addressId: string): Promise<TransactionSearchRecordResponse> {
-    let record = null;
     try {
         const record = await pb
             .collection(collection)
@@ -148,7 +151,7 @@ async function getTransactionSearchRecord(addressId: string): Promise<Transactio
             state: States.Success,
             data: mappedRecord
         } as SuccessState<TransactionSearchRecord>;
-    } catch (error) {
+    } catch (error: any) {
         if (error.status === 404) {
             return {
                 state: States.NotFound
