@@ -7,7 +7,7 @@ export async function getAddressInfo(addressId: string, limit: number = 10, offs
     url.searchParams.set("limit", (limit ?? 10).toString());
     url.searchParams.set("offset", (offset ?? 0).toString());
     
-    const response = await fetch(url);
+    const response = await fetch(url, { next: { revalidate: 30 } });
     console.info(`Request to ${url} returned status ${response.status}`);
 
     if (response.status === 404) {
@@ -38,7 +38,7 @@ export async function getAddressInfo(addressId: string, limit: number = 10, offs
 export async function getTransactionInfo(transactionId: string): Promise<TransactionResponse> {
     const url = new URL(`https://blockchain.info/rawtx/${transactionId}`);
     
-    const response = await fetch(url);    
+    const response = await fetch(url, { next: { revalidate: 30 } });
     console.info(`Request to ${url} returned status ${response.status}`);
 
     if (response.status === 404) {

@@ -1,11 +1,11 @@
 import DynamicTable from "src/components/dynamic-table";
 import { States } from "src/utils/state";
 import { SuccessState, ErrorState, NotFoundState } from "types/utils/state";
-import { TransactionResponse, TransactionInfo } from "types/utils/blockchain";
+import { AddressResponse, AddressInfo } from "types/utils/blockchain";
 
-async function getTransaction(transactionId: string): Promise<TransactionResponse> {
+async function getAddress(addressId: string): Promise<AddressResponse> {
     const response = await fetch(
-        `http://127.0.0.1:3000/api/transaction/btc/${transactionId}`,
+        `http://127.0.0.1:3000/api/address/btc/${addressId}`,
         {
             next: { revalidate: 10 },
         }
@@ -17,7 +17,7 @@ async function getTransaction(transactionId: string): Promise<TransactionRespons
             return {
                 state: States.Success,
                 data: data
-            } as SuccessState<TransactionInfo>;
+            } as SuccessState<AddressInfo>;
         case 404:
             return {
                 state: States.NotFound
@@ -30,34 +30,39 @@ async function getTransaction(transactionId: string): Promise<TransactionRespons
     }
 }
 
-function renderContent(response: TransactionResponse) {
+function renderContent(response: AddressResponse) {
     switch (response.state) {
         case States.Success:
-            return <DynamicTable data={response.data} />;
+            return (
+                <div>
+                    <DynamicTable data={response.data} />
+                    <DynamicTable data={response.data.transactions} />
+                </div>
+            );
         case States.Error:
             return (
                 <div>
-                    <h4>There was an error when attempting to fetch transaction details</h4>
-                    <small>Please provide another transaction or refresh the page to attempt the search again</small>
+                    <h4>There was an error when attempting to fetch address details</h4>
+                    <small>Please provide another address or refresh the page to attempt the search again</small>
                 </div>
             );   
         case States.NotFound:
         default:
             return (
                 <div>
-                    <h4>The transaction provided was not found</h4>
-                    <small>Please provide another transaction or refresh the page to attempt the search again</small>
+                    <h4>The address provided was not found</h4>
+                    <small>Please provide another address or refresh the page to attempt the search again</small>
                 </div>
             );
     }
 }
 
-export default async function TransactionPage({ params }: any) {
-    const response = await getTransaction(params.transactionId);
+export default async function AddressPage({ params }: any) {
+    const response = await getAddress(params.addressId);
 
     return (
         <div>
-            <h3>transaction/btc/{params.transactionId}</h3>
+            <h3>address/btc/{params.addressId}</h3>
             {renderContent(response)}
         </div>
     );
