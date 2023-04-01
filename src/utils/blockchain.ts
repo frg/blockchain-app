@@ -1,12 +1,14 @@
-import { States, SuccessState, ErrorState, NotFoundState } from "/types/utils/state.d.ts";
-import { AddressResponse, TransactionResponse } from "/types/utils/blockchain";
+import { States } from "src/utils/state";
+import { SuccessState, ErrorState, NotFoundState } from "types/utils/state";
+import { AddressResponse, TransactionResponse, AddressInfo, TransactionInfo } from "types/utils/blockchain";
 
-export async function getAddressInfo(addressId: string, limit: int = 10, offset: int = 0): Promise<AddressResponse> {
+export async function getAddressInfo(addressId: string, limit: number = 10, offset: number = 0): Promise<AddressResponse> {
     const url = new URL(`https://blockchain.info/rawaddr/${addressId}`);
-    url.searchParams.set("limit", limit ?? 10);
-    url.searchParams.set("offset", offset ?? 0);
+    url.searchParams.set("limit", (limit ?? 10).toString());
+    url.searchParams.set("offset", (offset ?? 0).toString());
     
     const response = await fetch(url);
+    console.info(`Request to ${url} returned status ${response.status}`);
 
     if (response.status === 404) {
         return {
@@ -36,7 +38,8 @@ export async function getAddressInfo(addressId: string, limit: int = 10, offset:
 export async function getTransactionInfo(transactionId: string): Promise<TransactionResponse> {
     const url = new URL(`https://blockchain.info/rawtx/${transactionId}`);
     
-    const response = await fetch(url);
+    const response = await fetch(url);    
+    console.info(`Request to ${url} returned status ${response.status}`);
 
     if (response.status === 404) {
         return {
