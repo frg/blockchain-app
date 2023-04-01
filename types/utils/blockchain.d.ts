@@ -1,4 +1,4 @@
-import { SuccessState, ErrorState, NotFoundState } from "/types/utils/state"
+import { SuccessState, ErrorState, NotFoundState } from "/types/utils/state";
 
 export interface AddressInfo {
     addressId: string;

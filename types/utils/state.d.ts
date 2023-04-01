@@ -5,7 +5,6 @@ export type SuccessState<T> = {
 
 export type ErrorState = {
     state: "error";
-    error: "";
 };
 
 export type NotFoundState = {

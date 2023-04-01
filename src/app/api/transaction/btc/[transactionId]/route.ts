@@ -1,13 +1,23 @@
 import { NextResponse } from "next/server";
 import { auditTransactionSearchRecord } from "src/utils/database/transaction-search";
-import { getTransactionInfo } from "src/utils/blockchain";
+import { getTransactionInfo } from "@/src/utils/blockchain-api";
 import { TransactionResponse } from "types/utils/blockchain";
 import { States } from "src/utils/state";
+import { Currencies } from "src/utils/currency";
 
-export async function GET(_request: any, { params }: any) {
+export async function GET(request: any, { params }: any) {
     const id = params.transactionId;
+    const { searchParams } = request.nextUrl;
+    const currencyCode = searchParams.get("currency") ?? Currencies.BTC.code;
 
-    const response: TransactionResponse = await getTransactionInfo(id);
+    const currency = Currencies[currencyCode.toUpperCase()];
+    if (currency === undefined) {
+        return NextResponse.json(
+            { message: `Currency value invalid. Supported currencies are ${Object.keys(Currencies).join(", ")}` }, 
+            { status: 400 });
+    }
+
+    const response: TransactionResponse = await getTransactionInfo(id, currency);
 
     switch (response.state)
     {
