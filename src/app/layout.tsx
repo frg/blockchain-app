@@ -1,4 +1,6 @@
-import '/src/styles/globals.css';
+import "/src/styles/globals.css";
+import TransactionSearch from "src/components/transaction-search"; 
+import AddressSearch from "src/components/address-search"; 
 
 export default function RootLayout({
     children,
@@ -13,6 +15,8 @@ export default function RootLayout({
                     {/* <p>Blockchain explorer</p> */}
                 </header>
                 <main>
+                    <TransactionSearch/>
+                    <AddressSearch/>
                     {children}
                 </main>
                 <footer></footer>
