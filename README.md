@@ -12,7 +12,7 @@
 * Add currency selector to UI
 * Add the ability to subscribe to wallet changes
 * Explore PocketBase transactions for search audit
-* Create E2E tests
+* Create E2E tests [https://nextjs.org/docs/testing](https://nextjs.org/docs/testing)
 * Cover more code with Unit Tests
 * Add authentication to app & api
 * Gracefully handle more error scenarios
