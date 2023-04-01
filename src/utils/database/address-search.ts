@@ -46,7 +46,7 @@ export async function getAddressSearches(limit: number = 5, offset: number = 0, 
 }
 
 export async function auditAddressSearchRecord(addressId: string): Promise<AddressSearchRecordResponse> {
-    // TODO: Add distributed lock since PocketBase does not have transactions
+    // TODO: Explore transactions for atomicity, https://pocketbase.io/docs/database/#transaction
     const exists = await getAddressSearchRecord(addressId);
 
     switch (exists.state)
