@@ -10,7 +10,7 @@ export default function RootLayout({
             <body>
                 <header>
                     <h1>Blockchain App</h1>
-                    <p>Blockchain explorer</p>
+                    {/* <p>Blockchain explorer</p> */}
                 </header>
                 <main>
                     {children}
