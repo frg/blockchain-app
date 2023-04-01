@@ -2,6 +2,7 @@ import DynamicTable from "src/components/dynamic-table";
 import { States } from "src/utils/state";
 import { SuccessState, ErrorState, NotFoundState } from "types/utils/state";
 import { AddressResponse, AddressInfo } from "types/utils/blockchain";
+import AddressSeachAudit from "@/src/components/address-search-audit";
 
 async function getAddress(addressId: string): Promise<AddressResponse> {
     const response = await fetch(
@@ -64,6 +65,10 @@ export default async function AddressPage({ params }: any) {
         <div>
             <h3>address/btc/{params.addressId}</h3>
             {renderContent(response)}
+
+            <h3>Top 5 searched addresses</h3>
+            {/* @ts-expect-error Server Component */}
+            <AddressSeachAudit/>
         </div>
     );
 }

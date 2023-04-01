@@ -2,6 +2,7 @@ import DynamicTable from "src/components/dynamic-table";
 import { States } from "src/utils/state";
 import { SuccessState, ErrorState, NotFoundState } from "types/utils/state";
 import { TransactionResponse, TransactionInfo } from "types/utils/blockchain";
+import TransactionSeachAudit from "@/src/components/transaction-search-audit";
 
 async function getTransaction(transactionId: string): Promise<TransactionResponse> {
     const response = await fetch(
@@ -59,6 +60,10 @@ export default async function TransactionPage({ params }: any) {
         <div>
             <h3>transaction/btc/{params.transactionId}</h3>
             {renderContent(response)}
+
+            <h3>Top 5 searched transactions</h3>
+            {/* @ts-expect-error Server Component */}
+            <TransactionSeachAudit/>
         </div>
     );
 }

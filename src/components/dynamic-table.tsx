@@ -1,6 +1,6 @@
-import { DynamicTableProps } from "@/types/components/dynamicTableProps";
+import { DynamicTableData } from "@/types/components/dynamicTable";
 
-export default function DynamicTable({ data }: DynamicTableProps) {
+export default function DynamicTable({ data }: DynamicTableData) {
     const formatKey = (key: string) => {
         // Remove _str suffix
         if (key.endsWith('_str')) {
@@ -17,7 +17,7 @@ export default function DynamicTable({ data }: DynamicTableProps) {
         return typeof value !== 'object' && !Array.isArray(value);
     };
 
-    const renderTableHeaders = ({ data }: DynamicTableProps) => {
+    const renderTableHeaders = ({ data }: DynamicTableData) => {
         if (Array.isArray(data) && data.length > 0) {
             return (
                 <tr>
@@ -32,7 +32,7 @@ export default function DynamicTable({ data }: DynamicTableProps) {
         return null;
     };
 
-    const renderTableRows = ({ data }: DynamicTableProps) => {
+    const renderTableRows = ({ data }: DynamicTableData) => {
         if (Array.isArray(data)) {
             return data.map((item, index) => (
                 <tr key={index}>
