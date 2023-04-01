@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { auditAddressSearchRecord } from "/src/utils/database/address-search";
-import { getAddressInfo } from "/src/utils/blockchain";
-import { AddressResponse } from "/types/utils/blockchain";
-import { States } from "/types/utils/state.d.ts";
+import { auditAddressSearchRecord } from "src/utils/database/address-search";
+import { getAddressInfo } from "src/utils/blockchain";
+import { AddressResponse } from "types/utils/blockchain";
+import { States } from "src/utils/state";
 
-export async function GET(request, { params }) {
+export async function GET(request: any, { params }: any) {
     const id = params.addressId;
     const { searchParams } = request.nextUrl;
     const limit = searchParams.get("limit");
@@ -17,10 +17,8 @@ export async function GET(request, { params }) {
         case States.Success:
             await auditAddressSearchRecord(id);
             return NextResponse.json(response.data);
-            break;
         case States.NotFound:
             return NextResponse.json({}, { status: 404 });
-            break;
         case States.Error:
         default:
             return NextResponse.json({ error: response.error }, { status: 500 });
